@@ -12,6 +12,7 @@ function DomainsPage() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [active, setActive] = useState("all");
+  const [pageNum ,setPageNum] =useState(8);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingDomain, setEditingDomain] = useState(null);
@@ -64,24 +65,20 @@ function DomainsPage() {
           Add Domain <PlusOutlined />
         </Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-200">
-        <div className="flex flex-col gap-1 ">
-          <label className="text-sm font-medium text-gray-600">Search</label>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-200">
+        <div className="flex flex-col gap-1 md:col-span-2">
+          <label className="text-sm font-medium text-gray-600 ">Search</label>
           <Input
             placeholder="Search domain URL..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full"
+            className="w-full "
             allowClear
           />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 ">
           <label className="text-sm font-medium text-gray-600">Status</label>
-          <Select
-            value={status}
-            onChange={setStatus}
-            className="w-full "
-          >
+          <Select value={status} onChange={setStatus} className="w-full ">
             <Select.Option value="all">All</Select.Option>
             <Select.Option value="pending">Pending</Select.Option>
             <Select.Option value="verified">Verified</Select.Option>
@@ -97,6 +94,35 @@ function DomainsPage() {
             <Select.Option value={false}>Inactive</Select.Option>
           </Select>
         </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-600">
+            Number of items per page (1 – 100)
+          </label>
+          <Input
+            type="number"
+            value={pageNum}
+            min={1}
+            max={100}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val === "") {
+                setPageNum("");
+                return;
+              }
+              const num = Number(val);
+              if (num >= 1 && num <= 100) {
+                setPageNum(num);
+              }
+            }}
+            onBlur={() => {
+              if (!pageNum || pageNum < 1) {
+                setPageNum(1);
+              }
+            }}
+            placeholder="e.g. 8"
+            className="rounded-md "
+          />
+        </div>
       </div>
       {isLoading && (
         <div className="flex justify-center py-10">
@@ -109,13 +135,16 @@ function DomainsPage() {
       )}
 
       {!isLoading && !isError && (
-        <DomainTable
-          data={filteredDomains}
-          onEdit={openEdit}
-          onDelete={handleDelete}
-          deletingId={deletingId}
-          loading={isFetching}
-        />
+        <>
+          <DomainTable
+            data={filteredDomains}
+            onEdit={openEdit}
+            onDelete={handleDelete}
+            deletingId={deletingId}
+            loading={isFetching}
+            pageNum={pageNum}
+          />
+        </>
       )}
 
       <DomainDrawer

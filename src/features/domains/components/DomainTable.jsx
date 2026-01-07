@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import { getDomainColumns } from "../utils/domainColumns.jsx";
 
-function DomainTable({ data, loading, onEdit, onDelete, deletingId }) {
+function DomainTable({ data, loading, onEdit, onDelete, deletingId,pageNum }) {
   const columns = getDomainColumns({ onEdit, onDelete });
   const mappedData = data.map((item) => ({
     ...item,
@@ -15,7 +15,7 @@ function DomainTable({ data, loading, onEdit, onDelete, deletingId }) {
         columns={columns}
         dataSource={mappedData}
         loading={loading}
-        pagination={{ pageSize: 8 }}
+        pagination={{ pageSize: pageNum }}
         scroll={{ x: 800 }}
         rowClassName={(record) =>
           record.isDeleting ? "opacity-50 pointer-events-none" : ""
