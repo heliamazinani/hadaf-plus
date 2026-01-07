@@ -6,10 +6,12 @@ import DomainDrawer from "../components/DomainDrawer";
 import { useDomainActions } from "../hooks/useDomainActions";
 
 function DomainsPage() {
-  const { data = [], isLoading, isFetching, isError , refetch } = useGetDomainsQuery();
+  const { data = [], isLoading, isFetching, isError  } = useGetDomainsQuery();
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
+const [active, setActive] = useState("all");
+  
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingDomain, setEditingDomain] = useState(null);
 
@@ -20,13 +22,14 @@ function DomainsPage() {
         .includes(search.toLowerCase());
 
       const matchesStatus = status === "all" || item.status === status;
+      const matchesActive = active === "all" || item.isActive === active;
 
-      return matchesSearch && matchesStatus;
+      return matchesSearch && matchesStatus && matchesActive;
     });
-  }, [data, search, status]);
+  }, [data, search, status,active]);
   const handleActionComplete = (success) => {
     if (success) {
-      refetch();
+    //   refetch();
       setEditingDomain(null);
       setDrawerOpen(false);
     }
@@ -72,7 +75,11 @@ function DomainsPage() {
         <Select.Option value="verified">Verified</Select.Option>
         <Select.Option value="rejected">Rejected</Select.Option>
       </Select>
-
+      <Select value={active} onChange={setActive} className="w-full md:w-48">
+        <Select.Option value="all">All</Select.Option>
+        <Select.Option value={true}>Active</Select.Option>
+        <Select.Option value={false}>Inactive</Select.Option>
+      </Select>
       {isLoading && (
         <div className="flex justify-center py-10">
           <Spin size="large" />
