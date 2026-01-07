@@ -3,21 +3,21 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const domainApi = createApi({
   reducerPath: "domainApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://6797aa2bc2c861de0c6d964c.mockapi.io/domain",
+    baseUrl: "/api",
   }),
   tagTypes: ["Domain"],
   endpoints: (builder) => ({
     getDomains: builder.query({
-      query: () => "/",
+      query: () => "/domain",
       providesTags: ["Domain"],
     }),
     getDomainById: builder.query({
-      query: (id) => `/${id}`,
+      query: (id) => `/domain/${id}`,
       providesTags: (_, __, id) => [{ type: "Domain", id }],
     }),
     createDomain: builder.mutation({
       query: (body) => ({
-        url: "/",
+        url: "/domain",
         method: "POST",
         body,
       }),
@@ -25,7 +25,7 @@ export const domainApi = createApi({
     }),
     updateDomain: builder.mutation({
       query: ({ id, ...body }) => ({
-        url: `/${id}`,
+        url: `/domain/${id}`,
         method: "PUT",
         body,
       }),
@@ -33,7 +33,7 @@ export const domainApi = createApi({
     }),
     deleteDomain: builder.mutation({
       query: (id) => ({
-        url: `/${id}`,
+        url: `/domain/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Domain"],
