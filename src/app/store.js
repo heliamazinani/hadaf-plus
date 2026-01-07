@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { domainApi } from "../features/domains/domainApi";
+import { domainApi } from "../features/domains/api/domainApi";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 export const store = configureStore({
@@ -9,4 +9,4 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(domainApi.middleware),
 });
-setupListeners(store.dispatch)
+setupListeners(store.dispatch);
