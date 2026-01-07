@@ -1,17 +1,26 @@
-import { Tag, Switch,Badge ,Space, Button } from "antd";
+import { Tag, Switch, Badge, Popover } from "antd";
+import { LinkOutlined } from "@ant-design/icons";
 import DomainStatusTag from "../components/DomainStatusTag";
 import  RowActionsDropdown  from "../../../components/RowActionsDropdown";
 export const getDomainColumns = ({ onEdit, onDelete }) => [
   {
-    title: "",
-    dataIndex: "isActive",
-    key: "isActive",
-    render: (value) => <Badge status={value? "success": "error"} disabled />,
-  },
-  {
     title: "Domain",
     dataIndex: "domain",
     key: "domain",
+    render: (domain, record) => (
+      <>
+        <Badge status={record.isActive ? "success" : "error"} />
+        <Popover
+          content=
+          {`go to ${domain}?`}
+        >
+          <a href={domain}>
+            {" "}
+            {domain} <LinkOutlined />
+          </a>
+        </Popover>
+      </>
+    ),
   },
   {
     title: "Status",
