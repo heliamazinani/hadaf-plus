@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const domainApi = createApi({
   reducerPath: "domainApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api",
+    baseUrl: "https://6797aa2bc2c861de0c6d964c.mockapi.io",
   }),
   tagTypes: ["Domain"],
   endpoints: (builder) => ({
