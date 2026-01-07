@@ -1,11 +1,23 @@
 import { Form, Input, Select, Switch, Button } from "antd";
-
+import { useEffect,useRef } from "react";
 function DomainForm({ initialValues, onSubmit, loading }) {
   const [form] = Form.useForm();
+  const didInit = useRef(false);
+  useEffect(() => {
+    if (!initialValues) {
+      form.resetFields();
+      didInit.current = false;
+      return;
+    }
+    if (!didInit.current) {
+      form.setFieldsValue(initialValues);
+      didInit.current = true;
+    }
+  }, [initialValues, form]);
 
   const handleFinish = (values) => {
     onSubmit(values);
-    form.resetFields();
+
   };
 
   return (

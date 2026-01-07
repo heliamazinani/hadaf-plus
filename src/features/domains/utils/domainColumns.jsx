@@ -4,7 +4,7 @@ import DomainStatusTag from "../components/DomainStatusTag";
 import  RowActionsDropdown  from "../../../components/RowActionsDropdown";
 export const getDomainColumns = ({ onEdit, onDelete }) => [
   {
-    title: "Domain",
+    title: "Domain URL",
     dataIndex: "domain",
     key: "domain",
     render: (domain, record) => (
@@ -23,19 +23,19 @@ export const getDomainColumns = ({ onEdit, onDelete }) => [
     ),
   },
   {
-    title: "Status",
+    title: "Verification Status",
     dataIndex: "status",
     key: "status",
     render: (status) => <DomainStatusTag status={status} />,
   },
   {
-    title: "Active",
+    title: "Active Status",
     dataIndex: "isActive",
     key: "isActive",
     render: (value) => <Switch checked={value} disabled />,
   },
   {
-    title: "Actions",
+    title: "",
     key: "actions",
     render: (_, record) => {
       const items = [

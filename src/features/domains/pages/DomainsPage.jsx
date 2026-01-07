@@ -6,25 +6,31 @@ import DomainDrawer from "../components/DomainDrawer";
 import { useDomainActions } from "../hooks/useDomainActions";
 
 function DomainsPage() {
-  const { data = [], isLoading, isError } = useGetDomainsQuery();
+  const { data = [], isLoading, isFetching, isError , refetch } = useGetDomainsQuery();
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingDomain, setEditingDomain] = useState(null);
 
-const filteredDomains = useMemo(() => {
-  return data.filter((item) => {
-    const matchesSearch = item.domain
-      .toLowerCase()
-      .includes(search.toLowerCase());
+  const filteredDomains = useMemo(() => {
+    return data.filter((item) => {
+      const matchesSearch = item.domain
+        .toLowerCase()
+        .includes(search.toLowerCase());
 
-    const matchesStatus = status === "all" || item.status === status;
+      const matchesStatus = status === "all" || item.status === status;
 
-    return matchesSearch && matchesStatus;
-  });
-}, [data, search, status]);
-
+      return matchesSearch && matchesStatus;
+    });
+  }, [data, search, status]);
+  const handleActionComplete = (success) => {
+    if (success) {
+      refetch();
+      setEditingDomain(null);
+      setDrawerOpen(false);
+    }
+  };
 
   const openCreate = () => {
     setEditingDomain(null);
@@ -38,9 +44,9 @@ const filteredDomains = useMemo(() => {
 
   const closeDrawer = () => setDrawerOpen(false);
 
-  const { handleSubmit, handleDelete, loading , deletingId} = useDomainActions({
+  const { handleSubmit, handleDelete, loading, deletingId } = useDomainActions({
     editingDomain,
-    closeDrawer,
+    onActionComplete: handleActionComplete,
   });
 
   return (
@@ -82,16 +88,22 @@ const filteredDomains = useMemo(() => {
           data={filteredDomains}
           onEdit={openEdit}
           onDelete={handleDelete}
-          deletingId = {deletingId}
+          deletingId={deletingId}
+          loading={isFetching}
         />
       )}
 
       <DomainDrawer
         open={drawerOpen}
-        onClose={closeDrawer}
+        onClose={() => {
+          if (!loading) {
+            setEditingDomain(null);
+            setDrawerOpen(false);
+          }
+        }}
         initialValues={editingDomain}
         onSubmit={handleSubmit}
-        loading = {loading}
+        loading={loading}
       />
     </div>
   );
