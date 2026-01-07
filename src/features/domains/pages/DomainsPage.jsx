@@ -24,7 +24,7 @@ function DomainsPage() {
         .includes(search.toLowerCase());
 
       const matchesStatus = status === "all" || item.status === status;
-      const matchesActive = active === "all" || item.isActive === active;
+      const matchesActive = active === "all" || Boolean(item.isActive) === active;
 
       return matchesSearch && matchesStatus && matchesActive;
     });
@@ -65,8 +65,8 @@ function DomainsPage() {
           Add Domain <PlusOutlined />
         </Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-200">
-        <div className="flex flex-col gap-1 md:col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4 bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-200">
+        <div className="flex flex-col gap-1 md:col-span-3">
           <label className="text-sm font-medium text-gray-600 ">Search</label>
           <Input
             placeholder="Search domain URL..."
@@ -95,7 +95,7 @@ function DomainsPage() {
           </Select>
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-600">
+          <label className="text-sm font-medium text-gray-600 ">
             Number of items per page (1 – 100)
           </label>
           <Input
